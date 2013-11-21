@@ -52,13 +52,23 @@ class Post(db.DynamicDocument):
 class Image(Post):
     image_url = db.StringField(required=True, max_length=255)
 
-# Get a post from db
+# Get a post from db by slug
 def get_post_from_db(slug):
     if not slug:
         raise ValueError()
     posts_found = Post.objects(slug=slug)
     if len(posts_found) == 1:
         return posts_found[0]
+    elif len(posts_found) == 0:
+        return None
+    else:
+        raise Exception('Database Integrity Error')
+
+# Get all posts from db
+def get_all_posts_from_db():
+    posts_found = Post.objects()
+    if len(posts_found) >= 1:
+        return posts_found
     elif len(posts_found) == 0:
         return None
     else:
@@ -71,13 +81,11 @@ def get_post_from_db(slug):
 # controllers
 @app.route("/")
 def hello():
-    post = get_post_from_db('testslug')
-    if post is None:
-        post = Post()
-        post.slug = 'testslug'
-        post.title = 'ttt'
-        post.save()
-    return "Hello from Python!"
+    post = get_all_posts_from_db()
+    str = []
+    for p in post:
+        str.append(p.__unicode__())
+    return ",".join(str)
 
 
 # launch
