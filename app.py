@@ -34,6 +34,10 @@ class Post(db.DynamicDocument):
     created_at = db.DateTimeField(default=datetime.datetime.now, required=True)
     title = db.StringField(max_length=255, required=True)
     slug = db.StringField(max_length=255, required=True)
+    # We have to use stringField here because Flask-MongoEngine does not support
+    # GeoLocationField types
+    geoLong = db.StringField(max_length=255, required=True)
+    geoLat = db.StringField(max_length=255, required=True)
 
     def __unicode__(self):
         return self.title
