@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <h1>All Moments</h1>
+    {% for post in posts %}
+    <p>{{post.imageurl}}</b></p>
+    {% endfor %}
+
+{% endblock %}

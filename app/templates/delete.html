@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Which image do you want to delete</h1>
+<form action = "" method = "post" name="login">
+	{{form.hidden_tag()}}
+	<p>
+		provide the slug of the image <br>
+		{{form.slug(size=255)}}
+		provide the admin key
+		{{form.key(size=255)}}
+	</p>
+	<input type = "submit" value = "delete">
+</form>
+{% endblock %}
