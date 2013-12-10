@@ -17,8 +17,9 @@ def index():
 
 @app.route("/all")
 def all_posts():
+	posts_found = Post.objects()
 	posts = [{"imageurl":"a"}, {"imageurl":"b"}]
-	return render_template("all.html", posts=posts)
+	return render_template("all.html", posts=posts_found)
 
 @app.route('/delete', methods = ['GET', 'POST'])
 def delete():
