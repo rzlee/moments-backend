@@ -3,7 +3,12 @@
 
     <h1>All Moments</h1>
     {% for post in posts %}
-    <p>{{post.imageurl}}</b></p>
+    <h4>{{post.title}}</h4>
+    <ul>
+      <li>slug: {{post.slug}}</li>
+      <li>image_url: {{post.image_url}}</li>
+      <li>geoLong: {{post.geoLong}}</li>
+      <li>geoLat: {{post.geoLat}}</li>
+    </ul>
     {% endfor %}
-
 {% endblock %}
