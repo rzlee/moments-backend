@@ -1,5 +1,5 @@
 import os
-from flask import render_template, redirect, flash, request, url_for, send_from_directory
+from flask import render_template, redirect, flash, request, url_for, send_from_directory, jsonify
 from app import app
 from forms import DeleteForm, LoginForm, EditForm
 from models import Post
@@ -42,7 +42,18 @@ def uploaded_file(filename):
 def all_posts():
 	posts_found = Post.objects()
 	posts = [{"imageurl":"a"}, {"imageurl":"b"}]
-	return render_template("all.html", posts=posts_found)
+	# return render_template("all.html", posts=posts_found)
+	array = [];
+	for post in posts_found:
+		temp = {};
+		temp["title"] = post.title
+		temp["slug"] = post.slug
+		temp["image_url"] = post.image_url
+		temp["geoLong"] = post.geoLong
+		temp["geoLat"] = post.geoLat
+		array.append(temp);
+	data = {"data":array}
+	return jsonify(data)
 
 @app.route('/delete', methods = ['GET', 'POST'])
 def delete():
