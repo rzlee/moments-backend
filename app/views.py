@@ -32,7 +32,15 @@ def upload_file():
 			path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 			print path
 			file.save(path)
-			return redirect(url_for('uploaded_file', filename=filename))
+			post = Post()
+			post.title = file.filename
+			post.slug = 'file-' + file.filename
+			post.geoLong = '0.0'
+			post.geoLat = '0.0'
+			post.image_url = url_for('uploaded_file', filename=filename)
+			post.save()
+			data = { "response" : "Success" }
+			return jsonify(data)
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
