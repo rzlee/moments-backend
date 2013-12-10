@@ -1,7 +1,15 @@
-from flask import render_template, redirect, flash
+import os
+from flask import render_template, redirect, flash, request, url_for, send_from_directory
 from app import app
 from forms import DeleteForm, LoginForm, EditForm
 from models import Post
+from werkzeug import secure_filename
+
+# allowed files
+def allowed_file(filename):
+	ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+	return '.' in filename and \
+	   filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 #----------------------------------------
 # views 
@@ -10,10 +18,25 @@ from models import Post
 admin_key = "admin"
 
 # views 
-@app.route("/")
+@app.route('/', methods=['GET', 'POST'])
 def index():
 	user = {'name':'demodude'}
 	return render_template("index.html", title = "moments", user = user)
+
+@app.route('/upload', methods=['POST'])
+def upload_file():
+	if request.method == 'POST':
+		file = request.files['file']
+		if file and allowed_file(file.filename):
+			filename = secure_filename(file.filename)
+			path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+			print path
+			file.save(path)
+			return redirect(url_for('uploaded_file', filename=filename))
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+	return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 @app.route("/all")
 def all_posts():

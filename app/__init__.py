@@ -1,9 +1,18 @@
-from flask import Flask
+import os
+from flask import Flask, request, redirect, url_for
 from mongoengine import connect
 from flask.ext.mongoengine import MongoEngine
 
 app = Flask(__name__)
 app.config.from_object('config')
+
+#----------------------------------------
+# files
+#----------------------------------------
+
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static/uploads')
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 #----------------------------------------
 # database
