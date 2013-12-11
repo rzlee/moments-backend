@@ -169,10 +169,12 @@ def tag_image():
 			post = p[0]
 			post.tags.append(tagval)
 			post.save()
+		tag_url = '/tagged/' + tagval
+		return redirect(tag_url)
 	posts_found = Post.objects()
 	return render_template('tag.html', posts = posts_found)
 
 @app.route('/tagged/<tagname>')
 def list_tagged(tagname):
 	posts_found = Post.objects(tags=tagname)
-	return render_template("viewtag.html", title = "tagged", posts = posts_found)
+	return render_template("viewtag.html", title = "tagged", posts = posts_found, tag=tagname)
