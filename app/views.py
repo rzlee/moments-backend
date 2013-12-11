@@ -41,7 +41,8 @@ def upload_file():
 			hash = hashlib.md5()
 			hash.update(filename);
 			global counter
-			new_filename = str(hash.hexdigest()[14:] + '_' + str(random.random()*100)) + str(counter)
+			hashstring = str(hash.hexdigest()[14:])
+			new_filename = hashstring + '_' + str(random.random()*100) + str(counter)
 			hash.update(new_filename)
 			counter = counter + 1
 			filename = hash.hexdigest()[20:] + '_' + filename
@@ -51,11 +52,12 @@ def upload_file():
 			url = url_for('uploaded_file', filename=filename)
 			data = {
 					"response" : "Success",
+					"slug": hashstring,
 					"image-url": url
 					}
 			post = Post()
 			post.title = file.filename
-			post.slug = 'file-' + file.filename
+			post.slug = hashstring
 			post.geoLong = '0.0'
 			post.geoLat = '0.0'
 			post.image_url = url
@@ -65,11 +67,11 @@ def upload_file():
 @app.route('/create', methods=['POST'])
 def create():
 	post = Post()
-	post.title = file.filename
-	post.slug = 'file-' + file.filename
-	post.geoLong = '0.0'
-	post.geoLat = '0.0'
-	post.image_url = request.url
+	post.title = request.args.get('title', '')
+	post.slug = request.args.get('slug', '')
+	post.geoLong = request.args.get('geoLong', '')
+	post.geoLat = request.args.get('geoLat', '')
+	post.image_url = request.args.get('image_url', '')
 	post.save()
 	data = {
 			"response" : "Success",
