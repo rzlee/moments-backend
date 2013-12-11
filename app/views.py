@@ -1,4 +1,5 @@
 import os
+import hashlib
 from flask import render_template, redirect, flash, request, url_for, send_from_directory, jsonify
 from app import app
 from forms import DeleteForm, LoginForm, EditForm
@@ -29,18 +30,32 @@ def upload_file():
 		file = request.files['file']
 		if file and allowed_file(file.filename):
 			filename = secure_filename(file.filename)
+			hash = hashlib.md5()
+			hash.update(filename);
+			filename = hash.hexdigest()[14:] + filename
 			path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 			print path
 			file.save(path)
-			post = Post()
-			post.title = file.filename
-			post.slug = 'file-' + file.filename
-			post.geoLong = '0.0'
-			post.geoLat = '0.0'
-			post.image_url = url_for('uploaded_file', filename=filename)
-			post.save()
-			data = { "response" : "Success" }
+			url = url_for('uploaded_file', filename=filename)
+			data = {
+					"response" : "Success",
+					"image-url": url
+					}
 			return jsonify(data)
+
+@app.route('/create', methods=['POST'])
+def create():
+	post = Post()
+	post.title = file.filename
+	post.slug = 'file-' + file.filename
+	post.geoLong = '0.0'
+	post.geoLat = '0.0'
+	post.image_url = request.url
+	post.save()
+	data = {
+			"response" : "Success",
+			}
+	return jsonify(data)
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
