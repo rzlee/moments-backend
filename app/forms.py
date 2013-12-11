@@ -13,5 +13,11 @@ class EditForm(Form):
 	title = TextField('title')	
 	key = TextField('key')	
 
+class UploadForm(Form):
+	slug = TextField('slug')	
+	title = TextField('title')	
+	geoLat = TextField('title')	
+	geoLong = TextField('title')	
+
 class TaggedForm(Form):
 	tag = TextField('tag')
