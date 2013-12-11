@@ -25,6 +25,8 @@ def index():
 	user = {'name':'demodude'}
 	return render_template("index.html", title = "moments", user = user)
 
+counter = 0
+
 @app.route('/upload', methods=['POST'])
 def upload_file():
 	if request.method == 'POST':
@@ -33,8 +35,10 @@ def upload_file():
 			filename = secure_filename(file.filename)
 			hash = hashlib.md5()
 			hash.update(filename);
-			new_filename = str(hash.hexdigest()[14:] + '_' + str(random.random()*100))
+			global counter
+			new_filename = str(hash.hexdigest()[14:] + '_' + str(random.random()*100)) + str(counter)
 			hash.update(new_filename)
+			counter = counter + 1
 			filename = hash.hexdigest()[20:] + '_' + filename
 			path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 			print path
