@@ -169,6 +169,8 @@ def tag_image():
 			post = p[0]
 			post.tags.append(tagval)
 			post.save()
+		tag_url = '/tagged/' + tagval
+		return redirect(tag_url)
 	posts_found = Post.objects()
 	return render_template('tag.html', posts = posts_found)
 
