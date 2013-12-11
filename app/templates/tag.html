@@ -6,16 +6,12 @@
 	<h4>{{post.title}}</h4>
 
 	<img src="{{post.image_url}}" alt={{post.title}}" width="400">
-	<ul>
-		<li>slug: {{post.slug}}</li>
-		<form action = "" method = "post" name = tag>
-			{{form.hidden_tag()}}
-			provide a new tag <br>
-			{{form.tag(size=50)}}
-			provide the slug <br>
-			{{form.slug(size=50)}} <br>
+	<form action= "/tag" method="post" name="tag">
+		provide a new tag <br>
+		<input name="tag" size="50" type="text">
+		<input name="slug" size="50" type="hidden" value="{{post.slug}}">
+		<br>
 		<input type="submit" value="tag">
-		</form>
-	</ul>
+	</form>
 	{% endfor %}
 {% endblock %}

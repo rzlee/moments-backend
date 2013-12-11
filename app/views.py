@@ -3,7 +3,7 @@ import os
 import hashlib
 from flask import render_template, redirect, flash, request, url_for, send_from_directory, jsonify
 from app import app
-from forms import DeleteForm, LoginForm, EditForm, TagForm
+from forms import DeleteForm, LoginForm, EditForm
 from models import Post
 from werkzeug import secure_filename
 
@@ -136,15 +136,19 @@ def login():
 
 @app.route('/tag', methods = ['GET', 'POST'])
 def tag_image():
-	form = TagForm()
-	p = Post.objects(slug = form.slug.data)
-	if len(p) == 1:
-		#otherwise somethings wrong
-		post = p[0]
-		post.tags.append(form.tag.data)
-		post.save()
+	if request.method == 'POST':
+		slugval = str(request.form['slug'])
+		tagval = str(request.form['tag'])
+		print slugval
+		p = Post.objects(slug = slugval)
+		print len(p)
+		if len(p) >= 1:
+			#otherwise somethings wrong
+			post = p[0]
+			post.tags.append(tagval)
+			post.save()
 	posts_found = Post.objects()
-	return render_template('tag.html', form = form, posts = posts_found)
+	return render_template('tag.html', posts = posts_found)
 
 @app.route('/tagged/<tagname>')
 def list_tagged(tagname):
