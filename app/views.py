@@ -67,7 +67,7 @@ def upload_file():
 @app.route('/create', methods=['POST'])
 def create():
 	post = Post()
-	post.title = file.filename
+	post.title = request.args.get('title', '')
 	post.slug = request.args.get('slug', '')
 	post.geoLong = request.args.get('geoLong', '')
 	post.geoLat = request.args.get('geoLat', '')
