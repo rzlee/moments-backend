@@ -25,6 +25,11 @@ def index():
 	user = {'name':'demodude'}
 	return render_template("index.html", title = "moments", user = user)
 
+@app.route('/all-list', methods=['GET', 'POST'])
+def list_all():
+	posts_found = Post.objects()
+	return render_template("all.html", title = "moments", posts = posts_found)
+
 counter = 0
 
 @app.route('/upload', methods=['POST'])
@@ -48,6 +53,13 @@ def upload_file():
 					"response" : "Success",
 					"image-url": url
 					}
+			post = Post()
+			post.title = file.filename
+			post.slug = 'file-' + file.filename
+			post.geoLong = '0.0'
+			post.geoLat = '0.0'
+			post.image_url = url
+			post.save()
 			return jsonify(data)
 
 @app.route('/create', methods=['POST'])
@@ -71,7 +83,6 @@ def uploaded_file(filename):
 @app.route("/all")
 def all_posts():
 	posts_found = Post.objects()
-	posts = [{"imageurl":"a"}, {"imageurl":"b"}]
 	# return render_template("all.html", posts=posts_found)
 	array = [];
 	for post in posts_found:

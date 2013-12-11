@@ -4,9 +4,10 @@
     <h1>All Moments</h1>
     {% for post in posts %}
     <h4>{{post.title}}</h4>
+    <img src="{{post.image_url}}" alt={{post.title}}" width="400">
     <ul>
-      <li>slug: {{post.slug}}</li>
       <li>image_url: {{post.image_url}}</li>
+      <li>slug: {{post.slug}}</li>
       <li>geoLong: {{post.geoLong}}</li>
       <li>geoLat: {{post.geoLat}}</li>
     </ul>
