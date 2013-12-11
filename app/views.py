@@ -1,3 +1,4 @@
+import random
 import os
 import hashlib
 from flask import render_template, redirect, flash, request, url_for, send_from_directory, jsonify
@@ -32,7 +33,9 @@ def upload_file():
 			filename = secure_filename(file.filename)
 			hash = hashlib.md5()
 			hash.update(filename);
-			filename = hash.hexdigest()[14:] + filename
+			new_filename = str(hash.hexdigest()[14:] + '_' + str(random.random()*100))
+			hash.update(new_filename)
+			filename = hash.hexdigest()[20:] + '_' + filename
 			path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 			print path
 			file.save(path)
