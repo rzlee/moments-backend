@@ -41,11 +41,11 @@ def upload_file():
 			hash = hashlib.md5()
 			hash.update(filename);
 			global counter
-			hashstring = str(hash.hexdigest()[14:])
-			new_filename = hashstring + '_' + str(random.random()*100) + str(counter)
+			new_filename = str(hash.hexdigest()[14:]) + '_' + str(random.random()*100) + str(counter)
 			hash.update(new_filename)
 			counter = counter + 1
 			filename = hash.hexdigest()[20:] + '_' + filename
+			hashstring = str(hash.hexdigest()[20:])
 			path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 			print path
 			file.save(path)
@@ -102,10 +102,9 @@ def delete():
 	form = DeleteForm()
 	if form.key.data == admin_key:
 		p = Post.objects(slug = form.slug.data)
-		if len(p) == 1:
-			#do stuff
-			p = p[0]
-			p.delete()
+		if len(p) >= 1:
+			for post in p:
+				post.delete()
 		else:
 			raise Exception('Database Integrity Error')
 
@@ -117,7 +116,7 @@ def edit():
 	if form.key.data == admin_key:
 		#change the title
 		p = Post.objects(slug = form.slug.data)
-		if len(p) == 1:
+		if len(p) >= 1:
 			#do stuff
 			p = p[0]
 			p.title = form.title.data
