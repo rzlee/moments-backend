@@ -197,3 +197,7 @@ def within_ran(post, lat, lon):
     post_lat = float(post.geoLat)
     post_lon = float(post.geoLong)
     return (lat - ran <= post_lat and lat + ran >= post_lat) and (lon - ran <= post_lon and lon + ran >= post_lat)
+
+@app.route('/about')
+def about():
+	return render_template("about.html")
