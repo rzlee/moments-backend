@@ -53,15 +53,8 @@ def upload_file():
 			data = {
 					"response" : "Success",
 					"slug": hashstring,
-					"image-url": url
+					"image_url": url
 					}
-			post = Post()
-			post.title = file.filename
-			post.slug = hashstring
-			post.geoLong = '0.0'
-			post.geoLat = '0.0'
-			post.image_url = url
-			post.save()
 			return jsonify(data)
 
 @app.route('/create', methods=['POST'])
@@ -73,6 +66,12 @@ def create():
 	post.geoLat = request.args.get('geoLat', '')
 	post.image_url = request.args.get('image_url', '')
 	post.save()
+	print post.title
+	print post.slug
+	print post.geoLong
+	print post.geoLat
+	print post.image_url
+	print post
 	data = {
 			"response" : "Success",
 			}
