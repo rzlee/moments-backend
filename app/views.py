@@ -3,7 +3,7 @@ import os
 import hashlib
 from flask import render_template, redirect, flash, request, url_for, send_from_directory, jsonify
 from app import app
-from forms import DeleteForm, LoginForm, EditForm
+from forms import DeleteForm, LoginForm, EditForm, UploadForm
 from models import Post
 from werkzeug import secure_filename
 
@@ -22,8 +22,9 @@ admin_key = "admin"
 # views 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-	user = {'name':'demodude'}
-	return render_template("index.html", title = "moments", user = user)
+	user = {'name':'joe bar'}
+	form = UploadForm()
+	return render_template("index.html", title = "moments", user = user, form = form)
 
 @app.route('/all-list', methods=['GET', 'POST'])
 def list_all():
@@ -41,11 +42,11 @@ def upload_file():
 			hash = hashlib.md5()
 			hash.update(filename);
 			global counter
-			hashstring = str(hash.hexdigest()[14:])
-			new_filename = hashstring + '_' + str(random.random()*100) + str(counter)
+			new_filename = str(hash.hexdigest()[14:]) + '_' + str(random.random()*100) + str(counter)
 			hash.update(new_filename)
 			counter = counter + 1
 			filename = hash.hexdigest()[20:] + '_' + filename
+			hashstring = str(hash.hexdigest()[20:])
 			path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 			print path
 			file.save(path)
@@ -66,16 +67,38 @@ def create():
 	post.geoLat = request.args.get('geoLat', '')
 	post.image_url = request.args.get('image_url', '')
 	post.save()
-	print post.title
-	print post.slug
-	print post.geoLong
-	print post.geoLat
-	print post.image_url
-	print post
 	data = {
 			"response" : "Success",
 			}
 	return jsonify(data)
+
+@app.route('/upload-combined', methods=['POST'])
+def upload_file_combined():
+	form = UploadForm()
+	if request.method == 'POST':
+		file = request.files['file']
+		if file and allowed_file(file.filename):
+			filename = secure_filename(file.filename)
+			hash = hashlib.md5()
+			hash.update(filename);
+			global counter
+			new_filename = str(hash.hexdigest()[14:]) + '_' + str(random.random()*100) + str(counter)
+			hash.update(new_filename)
+			counter = counter + 1
+			filename = hash.hexdigest()[20:] + '_' + filename
+			hashstring = str(hash.hexdigest()[20:])
+			path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+			print path
+			file.save(path)
+			url = url_for('uploaded_file', filename=filename)
+			post = Post()
+			post.title = form.title.data
+			post.slug = hashstring
+			post.geoLong = form.geoLong.data
+			post.geoLat = form.geoLat.data
+			post.image_url = url
+			post.save()
+			return redirect("/all-list")
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
@@ -102,10 +125,9 @@ def delete():
 	form = DeleteForm()
 	if form.key.data == admin_key:
 		p = Post.objects(slug = form.slug.data)
-		if len(p) == 1:
-			#do stuff
-			p = p[0]
-			p.delete()
+		if len(p) >= 1:
+			for post in p:
+				post.delete()
 		else:
 			raise Exception('Database Integrity Error')
 
@@ -117,7 +139,7 @@ def edit():
 	if form.key.data == admin_key:
 		#change the title
 		p = Post.objects(slug = form.slug.data)
-		if len(p) == 1:
+		if len(p) >= 1:
 			#do stuff
 			p = p[0]
 			p.title = form.title.data

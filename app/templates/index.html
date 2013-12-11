@@ -8,8 +8,14 @@
   <body>
       <h1>Hello, {{user.name}}!</h1>
       <h2>Upload new File</h2>
-      <form action="/upload" method=post enctype=multipart/form-data>
-        <input type=file name=file>
+      <form action="/upload-combined" method=post enctype=multipart/form-data>
+        <input type=file name=file><br>
+        Title
+        {{form.title(size=255)}}<br>
+        Longitude
+        {{form.geoLong(size=255)}}<br>
+        Latitude
+        {{form.geoLat(size=255)}}
         <input type=submit value=Upload>
       </form>      
   </body>
