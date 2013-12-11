@@ -1,5 +1,5 @@
 from flask.ext.wtf import Form
-from wtforms import TextField
+from wtforms import TextField, DecimalField
 
 class DeleteForm(Form):
 	slug = TextField('slug')
@@ -21,3 +21,8 @@ class UploadForm(Form):
 
 class TaggedForm(Form):
 	tag = TextField('tag')
+
+class GeoForm(Form):
+        lat = DecimalField()
+        lon = DecimalField()
+

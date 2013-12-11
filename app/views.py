@@ -3,7 +3,7 @@ import os
 import hashlib
 from flask import render_template, redirect, flash, request, url_for, send_from_directory, jsonify
 from app import app
-from forms import DeleteForm, LoginForm, EditForm, UploadForm
+from forms import DeleteForm, LoginForm, EditForm, UploadForm, GeoForm
 from models import Post
 from werkzeug import secure_filename
 
@@ -176,3 +176,22 @@ def tag_image():
 def list_tagged(tagname):
 	posts_found = Post.objects(tags=tagname)
 	return render_template("viewtag.html", title = "tagged", posts = posts_found)
+
+@app.route('/geo', methods = ['GET', 'POST'])
+def geo_list():
+    form = GeoForm()
+    posts_found = []
+    for post in Post.objects():
+        if within_ran(post, form.lat.data, form.lon.data):
+            posts_found.append(post)
+    return render_template("geo.html", title = "geo", posts = posts_found, form = form)
+
+def within_ran(post, lat, lon):
+    ran = 0.0005
+    if post == None or lat == None or lon == None:
+        return False
+    lat = float(lat)
+    lon = float(lon)
+    post_lat = float(post.geoLat)
+    post_lon = float(post.geoLong)
+    return (lat - ran <= post_lat and lat + ran >= post_lat) and (lon - ran <= post_lon and lon + ran >= post_lat)

@@ -1,7 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
 
-    <h1>All Moments</h1>
+    <h1>Geo Moments</h1>
+    <form action = "" method = "post" name = geo>
+    
+        {{form.hidden_tag()}}
+        Lat: {{form.lat()}} <br>
+        Lon: {{form.lon()}} <br>
+	<input type="submit" value="change">
+    </form>
     {% for post in posts %}
     <h4>{{post.title}}</h4>
     <img src="{{post.image_url}}" alt={{post.title}}" width="400">
