@@ -177,7 +177,7 @@ def tag_image():
 @app.route('/tagged/<tagname>')
 def list_tagged(tagname):
 	posts_found = Post.objects(tags=tagname)
-	return render_template("viewtag.html", title = "tagged", posts = posts_found)
+	return render_template("viewtag.html", title = "tagged", posts = posts_found, tag = tagname)
 
 @app.route('/geo', methods = ['GET', 'POST'])
 def geo_list():
