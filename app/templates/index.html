@@ -11,11 +11,11 @@
       <form action="/upload-combined" method=post enctype=multipart/form-data>
         <input type=file name=file><br>
         Title
-        {{form.title(size=255)}}<br>
+        {{form.title(size=25)}}<br>
         Longitude
-        {{form.geoLong(size=255)}}<br>
+        {{form.geoLong(size=25)}}<br>
         Latitude
-        {{form.geoLat(size=255)}}
+        {{form.geoLat(size=25)}}
         <input type=submit value=Upload>
       </form>      
   </body>
