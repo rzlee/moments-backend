@@ -15,6 +15,8 @@ class Post(db.DynamicDocument):
 	geoLong = db.StringField(max_length=255, required=True)
 	geoLat = db.StringField(max_length=255, required=True)
 	image_url = db.StringField(required=True, max_length=255)
+	tags = db.ListField(db.StringField(max_length=50))
+	#tag is not required
 
 	@property
 	def post_type(self):
@@ -25,3 +27,4 @@ class Post(db.DynamicDocument):
 		'indexes': ['-created_at', 'slug'],
 		'ordering': ['-created_at']
 	}
+

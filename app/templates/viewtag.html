@@ -1,0 +1,8 @@
+{% block content %}
+
+    <h1>Tagged Moments</h1>
+    {% for post in posts %}
+    <h4>{{post.title}}</h4>
+    <img src="{{post.image_url}}" alt={{post.title}}" width="400">
+    {% endfor %}
+{% endblock %}

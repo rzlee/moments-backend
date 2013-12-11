@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>Tag Moments</h1>
+	{% for post in posts %}
+	<h4>{{post.title}}</h4>
+
+	<img src="{{post.image_url}}" alt={{post.title}}" width="400">
+	<ul>
+		<li>slug: {{post.slug}}</li>
+		<form action = "" method = "post" name = tag>
+			{{form.hidden_tag()}}
+			provide a new tag <br>
+			{{form.tag(size=50)}}
+			provide the slug <br>
+			{{form.slug(size=50)}} <br>
+		<input type="submit" value="tag">
+		</form>
+	</ul>
+	{% endfor %}
+{% endblock %}

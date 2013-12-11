@@ -12,3 +12,10 @@ class EditForm(Form):
 	slug = TextField('slug')	
 	title = TextField('title')	
 	key = TextField('key')	
+
+class TagForm(Form):
+	tag = TextField('tag')
+	slug = TextField('slug')
+
+class TaggedForm(Form):
+	tag = TextField('tag')
